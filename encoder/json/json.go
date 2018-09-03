@@ -1,12 +1,25 @@
 package json
 
 import (
-	"encoding/json"
-
+	"github.com/json-iterator/go"
 	"github.com/micro/go-config/encoder"
 )
 
 type jsonEncoder struct{}
+
+var (
+	json = jsoniter.ConfigCompatibleWithStandardLibrary
+)
+
+// UseNumber fix unmarshal Number(8234567890123456789) to interface(8.234567890123457e+18)
+func UseNumber() {
+	json = jsoniter.Config{
+		UseNumber:              true,
+		EscapeHTML:             true,
+		SortMapKeys:            true,
+		ValidateJsonRawMessage: true,
+	}.Froze()
+}
 
 func (j jsonEncoder) Encode(v interface{}) ([]byte, error) {
 	return json.Marshal(v)
